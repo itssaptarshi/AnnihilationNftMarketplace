@@ -33,7 +33,7 @@ const NFTList = ({ nftList, loading, showPerPageItem, pagination, collectionName
         <div>
             <div className='row'>
                 {currentNftList.map(nft => (
-                    <div className='col-md-4' key={nft.token_hash}>
+                    <div className='col-md-4' key={nft.item_id}>
                         <NFTCard2 nft={nft} collectionName={collectionName} tokenAddress={tokenAddress} tokenId={tokenId} />
                     </div>
                     

@@ -2,6 +2,7 @@
 pragma solidity ^0.8.4;
 
 import "github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol";
 import "github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/security/ReentrancyGuard.sol";
 
@@ -9,14 +10,14 @@ contract MarketplaceFinal is ReentrancyGuard {
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
     Counters.Counter private _itemsSold;
-    uint256 public listingPrice = 0.025 ether;
-    address payable public feesCollector;
+
     address public owner;
+    IERC20 internal Ance;
 
      
-     constructor() {
+     constructor(address _token) {
+        Ance = IERC20(_token);
         owner = msg.sender;
-        feesCollector = payable(0xFBdF1C9ac750aDd0a6Bd2B3566B19aE4874d072A);
 
      }
      
@@ -24,8 +25,8 @@ contract MarketplaceFinal is ReentrancyGuard {
          uint itemId;
          address nftContract;
          uint256 tokenId;
-         address payable seller;
-         address payable owner;
+         address seller;
+         address owner;
          uint256 price;
          bool sold;
      }
@@ -54,7 +55,7 @@ contract MarketplaceFinal is ReentrancyGuard {
         address nftContract,
         uint256 tokenId,
         uint256 price
-        ) public payable nonReentrant {
+        ) public nonReentrant {
             require(price > 0, "Price must be greater than 0");
             
             _itemIds.increment();
@@ -64,8 +65,8 @@ contract MarketplaceFinal is ReentrancyGuard {
                 itemId,
                 nftContract,
                 tokenId,
-                payable(msg.sender),
-                payable(address(0)),
+                msg.sender,
+                address(0),
                 price,
                 false
             );
@@ -86,21 +87,20 @@ contract MarketplaceFinal is ReentrancyGuard {
     function createMarketSale(
         address nftContract,
         uint256 itemId
-        ) public payable nonReentrant {
+        ) public nonReentrant {
             uint price = idToMarketItem[itemId].price;
             uint tokenId = idToMarketItem[itemId].tokenId;
             bool sold = idToMarketItem[itemId].sold;
-            require(msg.value == price, "Please submit the asking price in order to complete the purchase");
-            require(sold != true, "This Sale has alredy finnished");
+            require(sold != true, "This Sale has alredy finished");
+
             emit MarketItemSold(
                 itemId,
                 msg.sender
                 );
-
-            idToMarketItem[itemId].seller.transfer(msg.value - listingPrice);
-            feesCollector.transfer(listingPrice);
+	        require(idToMarketItem[itemId].price <= Ance.balanceOf(msg.sender), "not enough tokens");
+            IERC20(Ance).transferFrom(msg.sender,idToMarketItem[itemId].seller,price);
             IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId);
-            idToMarketItem[itemId].owner = payable(msg.sender);
+            idToMarketItem[itemId].owner = msg.sender;
             _itemsSold.increment();
             idToMarketItem[itemId].sold = true;
         }
@@ -122,9 +122,9 @@ contract MarketplaceFinal is ReentrancyGuard {
         return items;
     }
 
-    function changeListingPrice(uint256 _listingPrice) public{
-        listingPrice = _listingPrice;
-    }
+    // function changeListingPrice(uint256 _listingPrice) public{
+    //     listingPrice = _listingPrice;
+    // }
   
       
 }

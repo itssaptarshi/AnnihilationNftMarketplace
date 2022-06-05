@@ -42,7 +42,7 @@ const NFT_Details = () => {
       "owner",
       "confirmed",
     ])
-  );  
+  );
     
     
     const [loading, setLoading] = useState(false);

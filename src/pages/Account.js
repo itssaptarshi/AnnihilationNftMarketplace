@@ -4,67 +4,74 @@ import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import { useMoralis } from "react-moralis";
 import { useMoralisWeb3Api } from "react-moralis";
-import { Alert } from "react-bootstrap";
+import { Tabs, Tab } from "react-bootstrap";
 import NFTList2 from '../components/ui/NFTList2';
 import img1 from "../images/blog-1-760x560.jpg";
 import img2 from "../images/blog-2-760x560.jpg";
 import img3 from "../images/blog-3-760x560.jpg";
 import Moralis from 'moralis';
-import GameLogin from '../components/ui/GameLogin';
-import GameSyncNFT from '../components/GameSyncNFT';
-import Loading from '../components/ui/Loading/Loading';
+
+const nft_list = [
+    {
+        "item_id":1,
+        "name":"Item One",
+        "img": img1,
+        "price": 10.3,
+    },
+    {
+        "item_id":2,
+        "name":"Item Two",
+        "img": img2,
+        "price": 8.023,
+    },
+    {
+        "item_id":3,
+        "name":"Item Three",
+        "img": img3,
+        "price": 6.2,
+    },
+    {
+        "item_id":4,
+        "name":"Item Four",
+        "img": img2,
+        "price": 0.6,
+    },
+];
+
 
 
 const Account = () => {
-    const Web3Api = useMoralisWeb3Api();
-    const { isInitialized, user } = useMoralis();
-    
-    const [walletAddress, setWalletAddress] = useState("");
     const [nftList, setNFTList] = useState([]);
     const [collectionName, setCollecionName] = useState([])
     const [tokenAddress,setTokenAddress] = useState([])
     const [tokenId,setTokenId] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [collectedMessage, setCollectedMessage] = useState(null);
-
-    const handleLoading = loading => setLoading(loading);
-    const handleCollectedMessage = message => setCollectedMessage(message);
-    
-    
+    const { user } = useMoralis();
+    const Web3Api = useMoralisWeb3Api();
+    let addr = user.get('ethAddress')
     const [optionsValue, setOptionsValue] = useState([]);
-    const UserData = JSON.parse(localStorage.getItem("UserData"));
-    const [gameLoginState, setGameLoginState] = useState(false);
-    const handleGameLoginState = loginState => setGameLoginState(loginState);
-    
-    // console.log("UserData From Account");
-    // console.log(UserData);
-    
-    // if(!isInitialized){
-    //     setLoading(true);
-    // }else{
-    //     let addr = user.get('ethAddress');
-    //     setWalletAddress(addr);
-    //     setLoading(false);
-        
-    // }
+
+    let data = [];
+    let data2 = [];
+    let data3 = [];
+    let data4 = [];
+    let data5 = [];
+    let length;
 
 
-    
+
 
     const userNft = async() =>{
         try{
             setLoading(true);
-        // if (isInitialized) {
-        //     let addr = user.get('ethAddress');
-        // }
-        const addr = user.get('ethAddress');
-        const options = { address: addr , chain: "bsc testnet" };
+        
+        const options = { address: addr , chain: "rinkeby" };
         const NFTs = await Moralis.Web3API.account.getNFTs(options);
 
         if (NFTs.result) {
             console.log(NFTs);
            // Convert the result metadata to an array
-           const convertMetadata = NFTs.result.filter( nft => nft.metadata !==null).map((nft) => {
+           const convertMetadata = NFTs.result.map((nft) => {
                nft.metadata = JSON.parse(nft.metadata);
                return nft;
            });
@@ -83,10 +90,6 @@ const Account = () => {
        setLoading(false);
 
    }
-
-
-   // Change Loading
-   
 
 
 
@@ -137,27 +140,14 @@ const Account = () => {
     useEffect(() => {
 
         const fetchPosts = async () => {
-        //   setLoading(true);
-        if(isInitialized){
-            userNft()
-            if (typeof UserData === "undefined" || UserData===null ) {
-                setGameLoginState(false);
-            }else{
-                setGameLoginState(true)
-            }
-        }
-          
+          setLoading(true);
+          userNft()
         //   setNFTList(data);
-        //   setLoading(false);
+          setLoading(false);
         };
     
         fetchPosts();
-      }, [isInitialized, gameLoginState]);
-
-    if (loading || !isInitialized) {
-        // return <h2 className='text-center'>Loading...</h2>;
-        return <Loading />;
-    }
+      }, []);
 
     return (
         <div>
@@ -181,26 +171,7 @@ const Account = () => {
                             <hr />
                             <div className="tab-content" id="nav-tabContent">
                                 <div className="tab-pane fade show active" id="nav-collected" role="tabpanel" aria-labelledby="nav-collected-tab">
-                                    
-                                    {
-                                    (collectedMessage!==null) && <div className="alert alert-warning alert-dismissible" role="alert"> <button type="button" className="btn-close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true" className='icon'>&times;</span> </button> {collectedMessage} </div>
-                                    }
-                                    <div className="row mb-10">
-                                        <div className="col-md-7">
-                                            
-                                            <div>
-                                                {
-                                                (gameLoginState===true)?<GameSyncNFT nftList={nftList} handleLoading={handleLoading} handleMessage={handleCollectedMessage} handleGameLoginState={handleGameLoginState} />
-                                                : <GameLogin handleLoading={handleLoading} handleGameLoginState={handleGameLoginState} />
-                                                }
-                                            </div>
-                                            
-                                        </div>
-                                        <div className="col-md-5">
-                                        <button onClick={userNft}>Click</button>
-                                        </div>
-                                    </div>
+                                    <button onClick={userNft}>Click</button>
                                     <NFTList2 nftList={nftList} collectionName={collectionName} tokenAddress={tokenAddress} tokenId={tokenId}/>
                                 </div>
                                 <div className="tab-pane fade" id="nav-created" role="tabpanel" aria-labelledby="nav-created-tab">

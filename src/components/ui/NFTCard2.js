@@ -5,13 +5,11 @@ import {useMoralisDapp} from '../MoralisDappProvider/MoralisDappProvider'
 import { useWeb3ExecuteFunction ,useMoralisQuery} from "react-moralis";
 import { useMoralis } from "react-moralis";
 import { Badge } from 'react-bootstrap';
-import { useIPFS } from '../support/Helpers';
 
 
 
 
 const NFTCard = ({nft, collectionName, tokenAddress,tokenId,test}) => {
-  
     const { Moralis } = useMoralis();
     const [nftToBuy,setNftToBuy] = useState(null);
     const [nftToSell, setNftToSell] = useState(null);
@@ -21,7 +19,7 @@ const NFTCard = ({nft, collectionName, tokenAddress,tokenId,test}) => {
     const listItemFunction = "createMarketItem";
     const [cost,setCost] = useState();
     const decimals = 18;
-    const queryMarketItems = useMoralisQuery("CreatedMarketItemTest");
+    const queryMarketItems = useMoralisQuery("CreatedAb");
     const fetchMarketItems = JSON.parse(
     JSON.stringify(queryMarketItems.data, [
       "objectId",
@@ -73,7 +71,7 @@ const NFTCard = ({nft, collectionName, tokenAddress,tokenId,test}) => {
         functionName: "setApprovalForAll",
         abi: [{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"}],
         params: {
-          operator: marketAddress,
+          operator: '0xD937e4C40a0001E50282476a636535fDF772bC5c',
           approved: true
           
         },
@@ -122,7 +120,12 @@ const NFTCard = ({nft, collectionName, tokenAddress,tokenId,test}) => {
 
     }
 
-    let img = useIPFS(nft.metadata.image)
+    function resolveLink(url){
+        if (!url || !url.includes("ipfs://")) return url;
+            return url.replace("ipfs://", "https://gateway.ipfs.io/ipfs/");
+        };
+    
+        let img = resolveLink(nft.metadata.image)
         //  console.log(nft.image)
 
     return (

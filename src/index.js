@@ -15,7 +15,7 @@ const serverUrl = process.env.REACT_APP_MORALIS_SERVER_URL;
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-        <MoralisProvider serverUrl="https://btbpgajnttxt.usemoralis.com:2053/server" appId="cg083RyJzWvVbLtyQ7WxQpfAyIICON4AN8MGSxqe">
+        <MoralisProvider serverUrl="https://4bqjpiq6uu0e.usemoralis.com:2053/server" appId="GaR8EJlINk0oLAitApMYkySOK2c9AWe2y3eKU6ZE">
           <MoralisDappProvider>
             <App />
           </MoralisDappProvider>

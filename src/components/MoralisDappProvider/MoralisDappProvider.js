@@ -8,7 +8,54 @@ function MoralisDappProvider({ children }) {
   const [chainId, setChainId] = useState();       
   const [contractABI, setContractABI] = useState([
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "nftContract",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			}
+		],
+		"name": "createMarketItem",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "nftContract",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "itemId",
+				"type": "uint256"
+			}
+		],
+		"name": "createMarketSale",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_token",
+				"type": "address"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
 	},
@@ -81,73 +128,6 @@ function MoralisDappProvider({ children }) {
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_listingPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "changeListingPrice",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			}
-		],
-		"name": "createMarketItem",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "nftContract",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "itemId",
-				"type": "uint256"
-			}
-		],
-		"name": "createMarketSale",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "feesCollector",
-		"outputs": [
-			{
-				"internalType": "address payable",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "fetchMarketItems",
 		"outputs": [
@@ -169,12 +149,12 @@ function MoralisDappProvider({ children }) {
 						"type": "uint256"
 					},
 					{
-						"internalType": "address payable",
+						"internalType": "address",
 						"name": "seller",
 						"type": "address"
 					},
 					{
-						"internalType": "address payable",
+						"internalType": "address",
 						"name": "owner",
 						"type": "address"
 					},
@@ -199,19 +179,6 @@ function MoralisDappProvider({ children }) {
 	},
 	{
 		"inputs": [],
-		"name": "listingPrice",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "owner",
 		"outputs": [
 			{
@@ -224,7 +191,7 @@ function MoralisDappProvider({ children }) {
 		"type": "function"
 	}
 ]); //Smart Contract ABI here
-  const [marketAddress, setMarketAddress] = useState('0xA6E30Ca098908672769045CaD9ad743e6c8ee1d7'); //Smart Contract Address Here
+  const [marketAddress, setMarketAddress] = useState('0xF035D4F527E3B02587A117B47f8560BD33b343e9'); //Smart Contract Address Here
 
 
 

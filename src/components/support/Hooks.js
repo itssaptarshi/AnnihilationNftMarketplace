@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useMoralis } from 'react-moralis';
 
+
 export const useNFTData = (options, handleLoading) => {
     const { Moralis, isInitialized, isInitializing } = useMoralis();
     const [NFT, setNFTdata] = useState(null);

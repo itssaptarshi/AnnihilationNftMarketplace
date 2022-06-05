@@ -21,7 +21,7 @@ const NAV__LINKS = [
   ];
 
 const Header = () => {
-    
+    const [showModal, setShowModal] = useState(false);
 
     return (
         <div>

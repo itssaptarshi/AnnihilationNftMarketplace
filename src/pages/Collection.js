@@ -33,7 +33,7 @@ const Collection = () => {
     const contractProcessor = useWeb3ExecuteFunction();
 
 
-    const options = { address: "0x3727B6e588c7A97Ae00E6bA710E2B15c85Ae4014", chain: "rinkeby" };
+    const options = { address: "0x8cb4d0957c365a2f8eb9f00330b931ac917407ec", chain: "rinkeby" };
     // const options = { address: "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D", chain: "eth" };
     
     async function collectionNFT(options){
